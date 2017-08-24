@@ -1,0 +1,9 @@
+[submodule "public/wp-content/themes/jensmcatanho"]
+	path = public/wp-content/themes/jensmcatanho
+	url = https://github.com/jensmcatanho/publisher-theme.git
+[submodule "public/wp-content/themes/memuller"]
+	path = public/wp-content/themes/memuller
+	url = https://gitlab.com/memuller.web/wp_theme.git
+[submodule "public/wp-content/plugins/memuller"]
+	path = public/wp-content/plugins/memuller
+	url = https://gitlab.com/memuller.web/wp_plugin.git
