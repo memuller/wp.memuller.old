@@ -1,6 +1,6 @@
 [submodule "public/wp-content/themes/memuller"]
 	path = public/wp-content/themes/memuller
-	url = git@gitlab.com:memuller.web/wp_theme.git
+	url = https://gitlab.com/memuller.web/wp_theme.git
 [submodule "public/wp-content/themes/jeancatanho"]
 	path = public/wp-content/themes/jeancatanho
-	url = git@github.com:jensmcatanho/publisher-theme.git
+	url = https://github.com/jensmcatanho/publisher-theme.git
