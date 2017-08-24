@@ -30,10 +30,6 @@ server {
   listen  <%= ENV['OPENSHIFT_NGINX_IP'] %>:<%= ENV['OPENSHIFT_NGINX_PORT'] %>;
   root    <%= ENV['OPENSHIFT_REPO_DIR'] %>/public;
 
-  location / {
-    index  index.php;
-  }
-
   # pass the PHP scripts to PHP-FPM
   location ~ \.php$ {
     fastcgi_pass unix:<%= ENV['OPENSHIFT_PHP_SOCKET'] %>;
@@ -51,5 +47,6 @@ server {
 
   location / {
     try_files $uri $uri/ /index.php?q=$uri&$args;
+    index  index.php;
   }
 }
