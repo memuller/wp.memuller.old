@@ -1,0 +1,33 @@
+.sidebar {
+  @include show-for(medium);
+  @include grid-column(2);
+  margin-top: 1rem;
+
+  article {
+  	margin-bottom: 2rem;
+
+  	h6 {
+  		font-family: $body-font-family;
+  		font-size: sizeOf('medium', 'h4');
+  		text-align: right;
+  	}
+  }
+
+  ul {
+  	display: block;
+  	width: 100%;
+
+  	li {
+  		display: block;
+  		text-align: right;
+		&:before {
+			display: none;
+		}
+  		a {
+  			color: $medium-gray;
+  			display: inline;
+        padding: .7rem 0rem;
+  		}
+  	}
+  }
+}

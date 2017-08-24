@@ -39,7 +39,7 @@
 			<div class="wrap">
 				<div class="home">
 					<a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home">
-						<?php echo get_option('WPLANG') == 'pt_BR' ? "memuller(pt);" : "memuller();" ?>
+						<?php bloginfo( 'name' ); echo get_option('WPLANG') == 'pt_BR' ? "(pt);" : "();" ?>
 					</a>
 				</div>
 				<?php wp_nav_menu([
