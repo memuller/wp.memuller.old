@@ -42,4 +42,14 @@ server {
     include <%= ENV['OPENSHIFT_NGINX_DIR'] %>/usr/nginx-<%= ENV['OPENSHIFT_NGINX_VERSION'] %>/conf/fastcgi_params;
   }
 
+  # Wordpress MU rules
+  if (!-e $request_filename){
+    rewrite /wp-admin$ $scheme://$host$uri/ permanent;
+    rewrite ^(/[^/]+)?(/wp-.*) $2 last;
+    rewrite ^(/[^/]+)?(/.*\.php) $2 last;
+  }
+
+  location / {
+    try_files $uri $uri/ /index.php?q=$uri&$args;
+  }
 }
