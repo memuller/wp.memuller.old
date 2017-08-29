@@ -4,9 +4,9 @@
 if [ ! -d ${OPENSHIFT_DATA_DIR}uploads ]; then
     mkdir ${OPENSHIFT_DATA_DIR}uploads
 fi
-rm -fr ${OPENSHIFT_REPO_DIR}public/wp-content/uploads
-ln -s ${OPENSHIFT_DATA_DIR}uploads ${OPENSHIFT_REPO_DIR}public/wp-content/uploads
+rm -fr ${OPENSHIFT_REPO_DIR}wp-content/uploads
+ln -s ${OPENSHIFT_DATA_DIR}uploads ${OPENSHIFT_REPO_DIR}wp-content/uploads
 
 # Links wp-config.php
-rm -fr ${OPENSHIFT_REPO_DIR}public/wp-config.php
-ln -s ${OPENSHIFT_DATA_DIR}wp-config.php ${OPENSHIFT_REPO_DIR}public/wp-config.php
+rm -fr ${OPENSHIFT_REPO_DIR}wp-config.php
+ln -s ${OPENSHIFT_DATA_DIR}wp-config.php ${OPENSHIFT_REPO_DIR}wp-config.php
