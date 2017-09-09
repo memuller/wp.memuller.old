@@ -1,3 +1,7 @@
 /wp-config.php
 /wp-content/uploads
 /data
+
+/wp-content/cache
+/wp-content/advanced-cache.php
+/wp-content/wp-cache-config.php
