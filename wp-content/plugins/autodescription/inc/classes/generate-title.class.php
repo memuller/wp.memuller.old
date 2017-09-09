@@ -56,15 +56,15 @@ class Generate_Title extends Generate_Description {
 	 *
 	 * @since 2.4.0:
 	 * @param array $args : accepted args : {
-	 * 		@param int term_id The Taxonomy Term ID when taxonomy is also filled in. Else post ID.
-	 * 		@param string taxonomy The Taxonomy name.
-	 * 		@param bool page_on_front Page on front condition for example generation.
-	 * 		@param bool placeholder Generate placeholder, ignoring options.
-	 * 		@param bool notagline Generate title without tagline.
-	 * 		@param bool meta Ignore doing_it_wrong. Used in og:title/twitter:title
-	 * 		@param bool get_custom_field Do not fetch custom title when false.
-	 * 		@param bool description_title Fetch title for description.
-	 * 		@param bool is_front_page Fetch front page title.
+	 *    @param int term_id The Taxonomy Term ID when taxonomy is also filled in. Else post ID.
+	 *    @param string taxonomy The Taxonomy name.
+	 *    @param bool page_on_front Page on front condition for example generation.
+	 *    @param bool placeholder Generate placeholder, ignoring options.
+	 *    @param bool notagline Generate title without tagline.
+	 *    @param bool meta Ignore doing_it_wrong. Used in og:title/twitter:title
+	 *    @param bool get_custom_field Do not fetch custom title when false.
+	 *    @param bool description_title Fetch title for description.
+	 *    @param bool is_front_page Fetch front page title.
 	 * }
 	 * @return string $title Title
 	 */
@@ -120,7 +120,8 @@ class Generate_Title extends Generate_Description {
 			$this->set_theme_dir_transient( true );
 
 		//* Empty title and rebuild it.
-		return $this->build_title( $title = '', $seplocation, $args );
+		$title = '';
+		return $this->build_title( $title, $seplocation, $args );
 	}
 
 	/**
@@ -151,14 +152,14 @@ class Generate_Title extends Generate_Description {
 
 			/**
 			 * Applies filters the_seo_framework_title_args : {
-			 * 		@param int term_id The Taxonomy Term ID when taxonomy is also filled in. Else post ID.
-			 * 		@param string taxonomy The Taxonomy name.
-			 * 		@param bool page_on_front Page on front condition for example generation.
-			 * 		@param bool notagline Generate title without tagline.
-			 * 		@param bool meta Ignore doing_it_wrong. Used in og:title/twitter:title
-			 * 		@param bool get_custom_field Do not fetch custom title when false.
-			 * 		@param bool description_title Fetch title for description.
-			 * 		@param bool is_front_page Fetch front page title.
+			 *    @param int term_id The Taxonomy Term ID when taxonomy is also filled in. Else post ID.
+			 *    @param string taxonomy The Taxonomy name.
+			 *    @param bool page_on_front Page on front condition for example generation.
+			 *    @param bool notagline Generate title without tagline.
+			 *    @param bool meta Ignore doing_it_wrong. Used in og:title/twitter:title
+			 *    @param bool get_custom_field Do not fetch custom title when false.
+			 *    @param bool description_title Fetch title for description.
+			 *    @param bool is_front_page Fetch front page title.
 			 * }
 			 *
 			 * @since 2.5.0
@@ -221,9 +222,9 @@ class Generate_Title extends Generate_Description {
 	 * @since 2.4.0
 	 *
 	 * @param array $args : accepted args : {
-	 * 		@param int term_id The Taxonomy Term ID
-	 * 		@param bool placeholder Generate placeholder, ignoring options.
-	 * 		@param bool page_on_front Page on front condition for example generation
+	 *    @param int term_id The Taxonomy Term ID
+	 *    @param bool placeholder Generate placeholder, ignoring options.
+	 *    @param bool page_on_front Page on front condition for example generation
 	 * }
 	 * @return string Title without tagline.
 	 */
@@ -252,9 +253,9 @@ class Generate_Title extends Generate_Description {
 	 * @since 2.6.0
 	 *
 	 * @param array $args : accepted args : {
-	 *   @param int $term_id The Taxonomy Term ID
-	 *   @param bool $placeholder Generate placeholder, ignoring options.
-	 *   @param bool $page_on_front Page on front condition for example generation
+	 *    @param int $term_id The Taxonomy Term ID
+	 *    @param bool $placeholder Generate placeholder, ignoring options.
+	 *    @param bool $page_on_front Page on front condition for example generation
 	 * }
 	 * @return string Title without tagline.
 	 */
@@ -284,10 +285,10 @@ class Generate_Title extends Generate_Description {
 	 * @param string $sep The Title sepeartor
 	 * @param string $seplocation The Title sepeartor location ( accepts 'left' or 'right' )
 	 * @param array $args : accepted args : {
-	 * 		@param int term_id The Taxonomy Term ID
-	 * 		@param string taxonomy The Taxonomy name
-	 * 		@param bool placeholder Generate placeholder, ignoring options.
-	 * 		@param bool get_custom_field Do not fetch custom title when false.
+	 *    @param int term_id The Taxonomy Term ID
+	 *    @param string taxonomy The Taxonomy name
+	 *    @param bool placeholder Generate placeholder, ignoring options.
+	 *    @param bool get_custom_field Do not fetch custom title when false.
 	 * }
 	 * @return string $title Title
 	 */
@@ -321,8 +322,6 @@ class Generate_Title extends Generate_Description {
 			$title = trim( str_replace( $sep, '', $title ) );
 			$seplocation = 'right';
 		}
-
-		$blogname = $this->get_blogname();
 
 		/**
 		 * Applies filters 'the_seo_framework_doingitwrong_add_sep' : bool
@@ -419,12 +418,12 @@ class Generate_Title extends Generate_Description {
 	 * @param string $title The Title to return
 	 * @param string $seplocation The Title sepeartor location ( accepts 'left' or 'right' )
 	 * @param array $args : accepted args : {
-	 * 		@param int 		term_id The Taxonomy Term ID
-	 * 		@param string 	taxonomy The Taxonomy name
-	 * 		@param bool 	page_on_front Page on front condition for example generation
-	 * 		@param bool 	placeholder Generate placeholder, ignoring options.
-	 * 		@param bool 	get_custom_field Do not fetch custom title when false.
-	 * 		@param bool 	is_front_page Fetch front page title.
+	 *    @param int    term_id The Taxonomy Term ID
+	 *    @param string taxonomy The Taxonomy name
+	 *    @param bool   page_on_front Page on front condition for example generation
+	 *    @param bool   placeholder Generate placeholder, ignoring options.
+	 *    @param bool   get_custom_field Do not fetch custom title when false.
+	 *    @param bool   is_front_page Fetch front page title.
 	 * }
 	 * @return string $title Title
 	 */
@@ -558,6 +557,10 @@ class Generate_Title extends Generate_Description {
 			}
 
 			$title = $this->get_the_404_title( $title );
+
+			/**
+			 * @since 2.9.4 This no longer affects post filters on admin pages.
+			 */
 			$title = $this->get_the_search_title( $title, false );
 
 			//* Fetch the post title if no title is found.
@@ -588,11 +591,11 @@ class Generate_Title extends Generate_Description {
 	 * @param bool $escape Parse Title through saninitation calls.
 	 * @param bool $get_option Whether to fetch the SEO Settings option.
 	 * @return array {
-	 *		'title' => (string) $title : The Generated Title
-	 *		'blogname' => (string) $blogname : The Generated Blogname
-	 *		'add_tagline' => (bool) $add_tagline : Whether to add the tagline
-	 *		'seplocation' => (string) $seplocation : The Separator Location
-	 *	}
+	 *    'title'       => (string) $title : The Generated Title
+	 *    'blogname'    => (string) $blogname : The Generated Blogname
+	 *    'add_tagline' => (bool) $add_tagline : Whether to add the tagline
+	 *    'seplocation' => (string) $seplocation : The Separator Location
+	 * }
 	 */
 	public function generate_home_title( $get_custom_field = true, $seplocation = '', $deprecated = '', $escape = true, $get_option = true ) {
 
@@ -874,7 +877,7 @@ class Generate_Title extends Generate_Description {
 				$title = \_x( 'Chats', 'post format archive title', 'autodescription' );
 			}
 		} elseif ( \is_post_type_archive() ) {
-			$title = \post_type_archive_title( '', false );
+			$title = \post_type_archive_title( '', false ) ?: $this->get_the_term_name( $term, true, false );
 			/* translators: Front-end output. */
 			$title = $use_prefix ? sprintf( __( 'Archives: %s' ), $title ) : $title;
 		} elseif ( isset( $term ) ) {
@@ -1247,8 +1250,29 @@ class Generate_Title extends Generate_Description {
 			if ( $paged >= 2 || $page >= 2 ) {
 				$sep = $this->get_title_separator();
 
-				/* translators: Front-end output. */
-				$title .= " $sep " . sprintf( __( 'Page %s', 'autodescription' ), max( $paged, $page ) );
+				$page_number = max( $paged, $page );
+
+				/**
+				 * Applies filters 'the_seo_framework_title_pagination' : string
+				 *
+				 * @since 2.9.4
+				 *
+				 * @param string $pagination  The pagination addition.
+				 * @param string $title       The old title.
+				 * @param int    $page_number The page number.
+				 * @param string $sep         The separator used.
+				 */
+				$pagination = \apply_filters_ref_array(
+					'the_seo_framework_title_pagination',
+					array(
+						/* translators: %d = page number. Front-end output. */
+						" $sep " . sprintf( \__( 'Page %d', 'autodescription' ), $page_number ),
+						$title,
+						$page_number,
+						$sep,
+					)
+				);
+				$title .= $pagination;
 			}
 		}
 

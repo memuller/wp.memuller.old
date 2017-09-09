@@ -151,6 +151,9 @@ class Init extends Query {
 	 */
 	public function init_admin_actions() {
 
+		/**
+		 * @since 2.8.0
+		 */
 		\do_action( 'the_seo_framework_admin_init' );
 
 		//* Initialize caching actions.
@@ -215,6 +218,11 @@ class Init extends Query {
 			// Add extra removable query arguments to the list.
 			\add_filter( 'removable_query_args', array( $this, 'add_removable_query_args' ) );
 		endif;
+
+		/**
+		 * @since 2.9.4
+		 */
+		\do_action( 'the_seo_framework_after_admin_init' );
 	}
 
 	/**
@@ -227,6 +235,9 @@ class Init extends Query {
 	 */
 	protected function init_front_end_actions() {
 
+		/**
+		 * @since 2.8.0
+		 */
 		\do_action( 'the_seo_framework_front_init' );
 
 		//* Remove canonical header tag from WP
@@ -240,15 +251,6 @@ class Init extends Query {
 
 		//* Earlier removal of the generator tag. Doesn't require filter.
 		\remove_action( 'wp_head', 'wp_generator' );
-
-		/**
-		 * @since 2.7.0 Changed priority from 999 to 9999.
-		 *              Now uses another method. Was: 'search_filter'.
-		 */
-		\add_action( 'pre_get_posts', array( $this, 'adjust_search_filter' ), 9999, 1 );
-
-		//* Adjusts archives output based on options.
-		\add_action( 'pre_get_posts', array( $this, 'adjust_archive_query' ), 9999, 1 );
 
 		/**
 		 * Outputs sitemap or stylesheet on request.
@@ -267,6 +269,17 @@ class Init extends Query {
 
 		//* Output meta tags.
 		\add_action( 'wp_head', array( $this, 'html_output' ), 1 );
+
+		if ( $this->is_option_checked( 'alter_archive_query' ) )
+			$this->init_alter_archive_query();
+
+		if ( $this->is_option_checked( 'alter_search_query' ) )
+			$this->init_alter_search_query();
+
+		/**
+		 * @since 2.9.4
+		 */
+		\do_action( 'the_seo_framework_after_front_init' );
 	}
 
 	/**
@@ -333,8 +346,8 @@ class Init extends Query {
 		 * Applies filters 'the_seo_framework_before_output' : array before functions output
 		 * Applies filters 'the_seo_framework_after_output' : array after functions output
 		 * @param array $functions {
-		 *		'callback' => string|array The function to call.
-		 *		'args'     => scalar|array Arguments. When array, each key is a new argument.
+		 *    'callback' => string|array The function to call.
+		 *    'args'     => scalar|array Arguments. When array, each key is a new argument.
 		 * }
 		 */
 		$filter_tag = $before ? 'the_seo_framework_before_output' : 'the_seo_framework_after_output';
@@ -469,7 +482,7 @@ class Init extends Query {
 				. $this->get_plugin_indicator( 'after', $init_start );
 
 		//* Already escaped.
-		echo "\r\n" . $output . "\r\n";
+		echo PHP_EOL . $output . PHP_EOL;
 
 		\do_action( 'the_seo_framework_do_after_output' );
 
@@ -485,9 +498,10 @@ class Init extends Query {
 	 */
 	public function _init_custom_field_redirect() {
 
-		if ( $this->is_singular() && $url = $this->get_custom_field( 'redirect' ) )
-			$this->do_redirect( $url );
-
+		if ( $this->is_singular() ) {
+			$url = $this->get_custom_field( 'redirect' );
+			$url && $this->do_redirect( $url );
+		}
 	}
 
 	/**
@@ -505,6 +519,7 @@ class Init extends Query {
 			return;
 		}
 
+		//= All WP defined protocols are allowed.
 		$url = \esc_url_raw( $url );
 
 		if ( empty( $url ) ) {
@@ -516,7 +531,10 @@ class Init extends Query {
 
 		/**
 		 * Applies filters 'the_seo_framework_redirect_status_code' : Absolute integer.
+		 *
 		 * @since 2.8.0
+		 *
+		 * @param unsigned int $redirect_type
 		 */
 		$redirect_type = \absint( \apply_filters( 'the_seo_framework_redirect_status_code', 301 ) );
 
@@ -524,6 +542,7 @@ class Init extends Query {
 			$this->_doing_it_wrong( __METHOD__, 'You should use 3xx HTTP Status Codes. Recommended 301 and 302.', '2.8.0' );
 
 		if ( false === $allow_external ) {
+			//= Only HTTP/HTTPS and internal URLs are allowed.
 			$url = $this->set_url_scheme( $url, 'relative' );
 			$url = $this->add_url_host( $url );
 			$scheme = $this->is_ssl() ? 'https' : 'http';
@@ -627,25 +646,67 @@ class Init extends Query {
 	}
 
 	/**
-	 * Excludes posts from search with certain metadata.
-	 * For now, it only looks at 'exclude_local_search'. If it exists, the post or
-	 * page will be excluded from the local Search Results.
+	 * Initializes search query adjustments.
 	 *
-	 * @since 2.7.0
+	 * @since 2.9.4
+	 */
+	public function init_alter_search_query() {
+
+		$type = $this->get_option( 'alter_search_query_type' );
+
+		switch ( $type ) :
+			case 'post_query' :
+				\add_filter( 'the_posts', array( $this, '_alter_search_query_post' ), 10, 2 );
+				break;
+
+			default :
+			case 'in_query' :
+				\add_action( 'pre_get_posts', array( $this, '_alter_search_query_in' ), 9999, 1 );
+				break;
+		endswitch;
+	}
+
+	/**
+	 * Initializes archive query adjustments.
 	 *
-	 * @param array $query The possible search query.
+	 * @since 2.9.4
+	 */
+	public function init_alter_archive_query() {
+
+		$type = $this->get_option( 'alter_archive_query_type' );
+
+		switch ( $type ) :
+			case 'post_query' :
+				\add_filter( 'the_posts', array( $this, '_alter_archive_query_post' ), 10, 2 );
+				break;
+
+			default :
+			case 'in_query' :
+				\add_action( 'pre_get_posts', array( $this, '_alter_archive_query_in' ), 9999, 1 );
+				break;
+		endswitch;
+	}
+
+	/**
+	 * Alters search query.
+	 *
+	 * @since 2.9.4
+	 *
+	 * @param WP_Query $wp_query The WP_Query instance.
 	 * @return void Early if no search query is found.
 	 */
-	public function adjust_search_filter( $query ) {
+	public function _alter_search_query_in( $wp_query ) {
 
 		// Don't exclude pages in wp-admin.
-		if ( $query->is_search && ! $this->is_admin() ) {
-
+		if ( $wp_query->is_search ) {
 			//* Only interact with an actual Search Query.
-			if ( ! isset( $query->query['s'] ) )
+			if ( ! isset( $wp_query->query['s'] ) )
 				return;
 
-			$meta_query = $query->get( 'meta_query' );
+			if ( $this->is_archive_query_adjustment_blocked( $wp_query ) )
+				return;
+
+			$meta_query = $wp_query->get( 'meta_query' );
 
 			//* Convert to array. Unset it if it's empty.
 			if ( ! is_array( $meta_query ) )
@@ -659,33 +720,31 @@ class Init extends Query {
 			 *       of 'compare'. Having no effect whatsoever as it's an exclusion.
 			 */
 			$meta_query[] = array(
-				array(
-					'key'      => 'exclude_local_search',
-					'type'     => 'NUMERIC',
-					'compare'  => 'NOT EXISTS',
-				),
+				'key'      => 'exclude_local_search',
+				'type'     => 'NUMERIC',
+				'compare'  => 'NOT EXISTS',
 			);
 
-			$query->set( 'meta_query', $meta_query );
+			$wp_query->set( 'meta_query', $meta_query );
 		}
 	}
 
 	/**
-	 * Excludes posts from Archive results with certain metadata.
-	 * For now, it only looks at 'exclude_from_archive'. If it exists, the post or
-	 * page will be excluded from the Archive Results.
+	 * Alters archive query.
 	 *
-	 * @since 2.9.3
+	 * @since 2.9.4
+	 * @access private
 	 *
-	 * @param array $query The possible archive query.
-	 * @return void Early if no archive query is found.
+	 * @param WP_Query $wp_query The WP_Query instance.
+	 * @return void Early if query alteration is useless or blocked.
 	 */
-	public function adjust_archive_query( $query ) {
+	public function _alter_archive_query_in( $wp_query ) {
 
-		// Don't exclude pages in wp-admin.
-		if ( ( $query->is_archive || $query->is_home ) && ! $this->is_admin() ) {
+		if ( $wp_query->is_archive || $wp_query->is_home ) {
+			if ( $this->is_archive_query_adjustment_blocked( $wp_query ) )
+				return;
 
-			$meta_query = $query->get( 'meta_query' );
+			$meta_query = $wp_query->get( 'meta_query' );
 
 			//* Convert to array. Unset it if it's empty.
 			if ( ! is_array( $meta_query ) )
@@ -699,14 +758,118 @@ class Init extends Query {
 			 *       of 'compare'. Having no effect whatsoever as it's an exclusion.
 			 */
 			$meta_query[] = array(
-				array(
-					'key'      => 'exclude_from_archive',
-					'type'     => 'NUMERIC',
-					'compare'  => 'NOT EXISTS',
-				),
+				'key'      => 'exclude_from_archive',
+				'type'     => 'NUMERIC',
+				'compare'  => 'NOT EXISTS',
 			);
 
-			$query->set( 'meta_query', $meta_query );
+			$wp_query->set( 'meta_query', $meta_query );
 		}
+
+		/* @TODO exchange above with this 3.0+
+		if ( ! empty( $wp_query->is_archive ) || ! empty( $wp_query->is_home ) ) {
+
+			$excluded = $this->get_exclude_from_archive_ids_cache();
+
+			if ( ! $excluded )
+				return;
+
+			$post__not_in = $wp_query->get( 'post__not_in' );
+
+			if ( ! empty( $post__not_in ) ) {
+				$excluded = array_merge( (array) $post__not_in, $excluded );
+				$excluded = array_unique( $excluded );
+			}
+
+			$wp_query->set( 'post__not_in', $excluded );
+		}
+		*/
+	}
+
+	/**
+	 * Alters search results after database query.
+	 *
+	 * @since 2.9.4
+	 * @access private
+	 *
+	 * @param array    $posts The array of retrieved posts.
+	 * @param WP_Query $wp_query The WP_Query instance.
+	 * @return array $posts
+	 */
+	public function _alter_search_query_post( $posts, $wp_query ) {
+
+		if ( $wp_query->is_search ) {
+			if ( $this->is_archive_query_adjustment_blocked( $wp_query ) )
+				return $posts;
+
+			foreach ( $posts as $n => $post ) {
+				if ( $this->get_custom_field( 'exclude_local_search', $post->ID ) ) {
+					unset( $posts[ $n ] );
+				}
+			}
+			//= Reset numeric index.
+			$posts = array_values( $posts );
+		}
+
+		return $posts;
+	}
+
+	/**
+	 * Alters archive results after database query.
+	 *
+	 * @since 2.9.4
+	 * @access private
+	 *
+	 * @param array    $posts The array of retrieved posts.
+	 * @param WP_Query $wp_query The WP_Query instance.
+	 * @return array $posts
+	 */
+	public function _alter_archive_query_post( $posts, $wp_query ) {
+
+		if ( $wp_query->is_archive || $wp_query->is_home ) {
+			if ( $this->is_archive_query_adjustment_blocked( $wp_query ) )
+				return $posts;
+
+			foreach ( $posts as $n => $post ) {
+				if ( $this->get_custom_field( 'exclude_from_archive', $post->ID ) ) {
+					unset( $posts[ $n ] );
+				}
+			}
+			//= Reset numeric index.
+			$posts = array_values( $posts );
+		}
+
+		return $posts;
+	}
+
+	/**
+	 * Determines whether the archive query adjustment is blocked.
+	 *
+	 * @since 2.9.4
+	 *
+	 * @param WP_Query $wp_query WP_Query object. Passed by reference.
+	 * @return bool
+	 */
+	protected function is_archive_query_adjustment_blocked( &$wp_query ) {
+
+		static $has_filter = null;
+
+		if ( null === $has_filter ) {
+			$has_filter = \has_filter( 'the_seo_framework_do_adjust_archive_query' );
+		}
+		if ( $has_filter ) {
+			/**
+			 * Applies filters 'the_seo_framework_do_adjust_archive_query' : boolean
+			 *
+			 * @since 2.9.4
+			 *
+			 * @param bool   $do Whether to execute adjustment.
+			 * @param object $wp_query The current query. Passed by reference.
+			 */
+			if ( ! \apply_filters_ref_array( 'the_seo_framework_do_adjust_archive_query', array( true, &$wp_query ) ) )
+				return true;
+		}
+
+		return false;
 	}
 }

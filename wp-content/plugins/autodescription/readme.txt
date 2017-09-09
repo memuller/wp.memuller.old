@@ -1,10 +1,11 @@
 === The SEO Framework ===
 Contributors: Cybr
 Donate link: https://theseoframework.com/donate/
-Tags: google, bing, open graph, seo, xml sitemap, breadcrumbs, meta, search engine, woocommerce, cpt, facebook, twitter
+Tags: SEO, XML Sitemap, Google, Open Graph, Schema.org
 Requires at least: 4.4.0
-Tested up to: 4.8.0
-Stable tag: 2.9.3
+Tested up to: 4.8.1
+Requires PHP: 5.3.0
+Stable tag: 2.9.4
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -17,7 +18,7 @@ The SEO Framework plugin provides an automated and advanced SEO solution for you
 
 This plugin provides an automated, accessible, unbranded and extremely fast SEO solution for any WordPress website.
 
-For optional advanced SEO options and output, check out our free companion plugin [Extension Manager](https://wordpress.org/plugins/the-seo-framework-extension-manager/).
+For optional advanced SEO tools and output, check out our free companion plugin [Extension Manager](https://wordpress.org/plugins/the-seo-framework-extension-manager/).
 
 > <strong>This plugin strongly helps you create better SEO value for your content.</strong><br>
 > But at the end of the day, it all depends on how entertaining or well-constructed your content or product is.
@@ -225,6 +226,28 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 == Changelog ==
 
+= 2.9.4 - Terminal Queries =
+
+**Release date:**
+
+* August 30th, 2017
+
+**Summarized:**
+
+* New performance options have been added. They allow you to optimize Search and Archive query alterations.
+* Schema.org JSON-LD data is now cleaner when you run PHP 5.4 or later.
+* Custom input image URLs can now dynamically switch between HTTP and HTTPS and the dimensions are always set, regardless of input.
+* Multisite networks no longer initiate new database connections on every page for plugin compatibility checks.
+
+**Did you know?**
+
+* Local SEO has been added to the [Extension Manager](https://wordpress.org/plugins/the-seo-framework-extension-manager/).
+* It increases location-aware search presence in Google Search, Google Maps, and even Google Images.
+
+**Detailed log:**
+
+* ***I had not overlooked them, and [they shall be answered](https://theseoframework.com/?p=2135#detailed).***
+
 = 2.9.3 - Assiduous Substratum =
 
 **Release date:**
@@ -269,7 +292,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 **Detailed log:**
 
-***Already the Sun is climbing to noon, and I feel the need of [something to strengthen me](https://theseoframework.com/?p=2064#detailed).***
+* ***Already the Sun is climbing to noon, and I feel the need of [something to strengthen me](https://theseoframework.com/?p=2064#detailed).***
 
 = 2.9.2 - Diminutive Consolidation =
 
@@ -301,7 +324,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 **Detailed log:**
 
-***If you are a friend, speak the password, and the doors will open, and [you can enter](https://theseoframework.com/?p=1982#detailed).***
+* ***If you are a friend, speak the password, and the doors will open, and [you can enter](https://theseoframework.com/?p=1982#detailed).***
 
 = 2.9.1 - Sovereign Comprehension =
 
@@ -316,7 +339,7 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 **Detailed log:**
 
-***All we have to decide is what to do with [the time that is given us](https://theseoframework.com/?p=1912#detailed).***
+* ***All we have to decide is what to do with [the time that is given us](https://theseoframework.com/?p=1912#detailed).***
 
 = 2.9.0 - Equitable Erudition =
 
@@ -371,11 +394,11 @@ Transporting Terms and Taxonomies SEO data isn't supported.
 
 **Detailed log:**
 
-***It is some miles, but [it will shorten your journey tomorrow](https://theseoframework.com/?p=1903#detailed).***
+* ***It is some miles, but [it will shorten your journey tomorrow](https://theseoframework.com/?p=1903#detailed).***
 
 = Full changelog =
 
-**The full changelog can be found [here](http://theseoframework.com/?cat=2).**
+* **The full changelog can be found [here](http://theseoframework.com/?cat=2).**
 
 == Upgrade Notice ==
 

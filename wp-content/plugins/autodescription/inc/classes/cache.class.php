@@ -819,8 +819,8 @@ class Cache extends Sitemaps {
 	 * Adds cache key suffix based on blog id and locale.
 	 *
 	 * @since 2.7.0
-	 * @since 2.8.0 $locale is now static.
-	 *				$key may now be empty.
+	 * @since 2.8.0 1: $locale is now static.
+	 *              2: $key may now be empty.
 	 * @staticvar string $locale
 	 *
 	 * @return string the cache key.
@@ -1095,6 +1095,7 @@ class Cache extends Sitemaps {
 	 * @since 2.4.2
 	 * @since 2.8.0 Now listens to option 'cache_meta_schema' before deleting transient.
 	 * @since 2.9.1 Now no longer sets object property $this->ld_json_transient.
+	 * @since 2.9.4 Removed cache.
 	 *
 	 * @param mixed $page_id The page ID or identifier.
 	 * @param string $taxonomy The tt name.
@@ -1103,20 +1104,12 @@ class Cache extends Sitemaps {
 	 */
 	public function delete_ld_json_transient( $page_id, $taxonomy = '', $type = null ) {
 
-		static $flushed = null;
-
-		if ( ! isset( $flushed ) ) {
-			if ( $this->is_option_checked( 'cache_meta_schema' ) ) {
-				$transient = $this->get_ld_json_transient( $page_id, $taxonomy, $type );
-				\delete_transient( $transient );
-			}
-
-			$flushed = 'Oh behave!';
-
-			return true;
+		if ( $this->is_option_checked( 'cache_meta_schema' ) ) {
+			$transient = $this->get_ld_json_transient( $page_id, $taxonomy, $type );
+			\delete_transient( $transient );
 		}
 
-		return false;
+		return true;
 	}
 
 	/**
