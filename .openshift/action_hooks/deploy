@@ -24,6 +24,6 @@ if [ ! -d ${OPENSHIFT_DATA_DIR}cache ]; then
     mkdir ${OPENSHIFT_DATA_DIR}cache
 fi
 
-ln -s ${OPENSHIFT_DATA_DIR}wp-content/advanced-cache.php ${OPENSHIFT_REPO_DIR}wp-content/advanced-cache.php
-ln -s ${OPENSHIFT_DATA_DIR}wp-content/wp-cache-config.php ${OPENSHIFT_REPO_DIR}wp-content/wp-cache-config.php
-ln -s ${OPENSHIFT_DATA_DIR}wp-content/cache ${OPENSHIFT_REPO_DIR}wp-content/cache
+ln -s ${OPENSHIFT_DATA_DIR}advanced-cache.php ${OPENSHIFT_REPO_DIR}wp-content/advanced-cache.php
+ln -s ${OPENSHIFT_DATA_DIR}wp-cache-config.php ${OPENSHIFT_REPO_DIR}wp-content/wp-cache-config.php
+ln -s ${OPENSHIFT_DATA_DIR}cache ${OPENSHIFT_REPO_DIR}wp-content/cache
