@@ -71,16 +71,16 @@ class Generate_Url extends Generate_Title {
 	 *
 	 * @param string $url the url
 	 * @param array $args : accepted args : {
-	 * 		@param bool $paged Return current page URL without pagination if false
-	 * 		@param bool $paged_plural Whether to add pagination for the second or later page.
-	 * 		@param bool $from_option Get the canonical uri option
-	 * 		@param object $post The Post Object.
-	 * 		@param bool $external Whether to fetch the current WP Request or get the permalink by Post Object.
-	 * 		@param bool $is_term Fetch url for term.
-	 * 		@param object $term The term object.
-	 * 		@param bool $home Fetch home URL.
-	 * 		@param bool $forceslash Fetch home URL and slash it, always.
-	 *		@param int $id The Page or Term ID.
+	 *    @param bool $paged Return current page URL without pagination if false
+	 *    @param bool $paged_plural Whether to add pagination for the second or later page.
+	 *    @param bool $from_option Get the canonical uri option
+	 *    @param object $post The Post Object.
+	 *    @param bool $external Whether to fetch the current WP Request or get the permalink by Post Object.
+	 *    @param bool $is_term Fetch url for term.
+	 *    @param object $term The term object.
+	 *    @param bool $home Fetch home URL.
+	 *    @param bool $forceslash Fetch home URL and slash it, always.
+	 *    @param int $id The Page or Term ID.
 	 * }
 	 * @return string Escape url.
 	 */
@@ -778,15 +778,21 @@ class Generate_Url extends Generate_Title {
 
 		$additions = '';
 		if ( ! empty( $query ) ) {
-
 			if ( false !== strpos( $query, '&' ) ) {
+				//= This can fail on malformed URLs
 				$query = explode( '&', $query );
 			} else {
 				$query = array( $query );
 			}
 
 			foreach ( $query as $arg ) {
-				if ( false === strpos( $path, $arg ) )
+				/**
+				 * @since 2.9.4 Added $args availability check.
+				 * This is a band-aid, not a fix.
+				 * @TODO inspect prior explode().
+				 * @link https://wordpress.org/support/topic/error-when-previewing-a-draft-of-knowledge-base-article/#post-9452791
+				 */
+				if ( $arg && false === strpos( $path, $arg ) )
 					$additions .= '&' . $arg;
 			}
 		}

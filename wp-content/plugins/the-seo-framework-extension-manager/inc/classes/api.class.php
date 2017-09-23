@@ -168,6 +168,8 @@ class API extends Core {
 	 * Generates software API URL to connect to the WooCommerce API manager.
 	 *
 	 * @since 1.0.0
+	 * @since 1.3.2 Circumvented improper separator and encoding.
+	 * @link http://php.net/arg-separator.output
 	 *
 	 * @param array $args The API query parameters.
 	 * @return string The escaped API URL with parameters.
@@ -176,7 +178,7 @@ class API extends Core {
 
 		$api_url = \add_query_arg( 'wc-api', 'tsfem-software-api', $this->get_activation_url() );
 
-		return \esc_url_raw( $api_url . '&' . http_build_query( $args ), [ 'http', 'https' ] );
+		return \esc_url_raw( $api_url . '&' . http_build_query( $args, '', '&', PHP_QUERY_RFC1738 ), [ 'http', 'https' ] );
 	}
 
 	/**

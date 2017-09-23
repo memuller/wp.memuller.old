@@ -14,3 +14,16 @@ ln -s ${OPENSHIFT_DATA_DIR}wp-config.php ${OPENSHIFT_REPO_DIR}wp-config.php
 # Links .htaccess
 rm -fr ${OPENSHIFT_REPO_DIR}.htaccess
 ln -s ${OPENSHIFT_DATA_DIR}htaccess ${OPENSHIFT_REPO_DIR}.htaccess
+
+# Links WP-SuperCache stuff
+rm -fr ${OPENSHIFT_REPO_DIR}wp-content/advanced-cache.php
+rm -fr ${OPENSHIFT_REPO_DIR}wp-content/wp-cache-config.php
+rm -fr ${OPENSHIFT_REPO_DIR}wp-content/cache
+
+if [ ! -d ${OPENSHIFT_DATA_DIR}cache ]; then
+    mkdir ${OPENSHIFT_DATA_DIR}cache
+fi
+
+ln -s ${OPENSHIFT_DATA_DIR}advanced-cache.php ${OPENSHIFT_REPO_DIR}wp-content/advanced-cache.php
+ln -s ${OPENSHIFT_DATA_DIR}wp-cache-config.php ${OPENSHIFT_REPO_DIR}wp-content/wp-cache-config.php
+ln -s ${OPENSHIFT_DATA_DIR}cache ${OPENSHIFT_REPO_DIR}wp-content/cache

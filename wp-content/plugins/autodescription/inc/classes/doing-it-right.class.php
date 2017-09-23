@@ -67,6 +67,7 @@ class Doing_It_Right extends Generate_Ldjson {
 	 * Adds post states in post/page edit.php query
 	 *
 	 * @since 2.1.0
+	 * @since 2.9.4 Now listens to `alter_search_query` and `alter_archive_query` options.
 	 *
 	 * @param array $states The current post states array
 	 * @param object $post The Post Object.
@@ -76,8 +77,8 @@ class Doing_It_Right extends Generate_Ldjson {
 		$post_id = isset( $post->ID ) ? $post->ID : false;
 
 		if ( $post_id ) {
-			$search_exclude = (bool) $this->get_custom_field( 'exclude_local_search', $post_id );
-			$archive_exclude = (bool) $this->get_custom_field( 'exclude_from_archive', $post_id );
+			$search_exclude = $this->get_option( 'alter_search_query' ) && $this->get_custom_field( 'exclude_local_search', $post_id );
+			$archive_exclude = $this->get_option( 'alter_archive_query' ) && $this->get_custom_field( 'exclude_from_archive', $post_id );
 
 			if ( $search_exclude )
 				$states[] = \esc_html__( 'No Search', 'autodescription' );
@@ -693,13 +694,13 @@ class Doing_It_Right extends Generate_Ldjson {
 	 *
 	 * @param array $args The term args.
 	 * @return array $data {
-	 *	 'title' => $title,
-	 *	 'title_is_from_custom_field' => $title_is_from_custom_field,
-	 *	 'description' => $description,
-	 *	 'description_is_from_custom_field' => $description_is_from_custom_field,
-	 *	 'noindex' => $noindex,
-	 *	 'nofollow' => $nofollow,
-	 *	 'noarchive' => $noarchive
+	 *    $title,
+	 *    $title_is_from_custom_field,
+	 *    $description,
+	 *    $description_is_from_custom_field,
+	 *    $noindex,
+	 *    $nofollow,
+	 *    $noarchive
 	 * }
 	 */
 	protected function the_seo_bar_term_data( $args ) {
@@ -743,14 +744,14 @@ class Doing_It_Right extends Generate_Ldjson {
 		$nofollow = (bool) $nofollow;
 		$noarchive = (bool) $noarchive;
 
-		return array(
-			'title' => $title,
-			'title_is_from_custom_field' => $title_is_from_custom_field,
-			'description' => $description,
-			'description_is_from_custom_field' => $description_is_from_custom_field,
-			'noindex' => $noindex,
-			'nofollow' => $nofollow,
-			'noarchive' => $noarchive,
+		return compact(
+			'title',
+			'title_is_from_custom_field',
+			'description',
+			'description_is_from_custom_field',
+			'noindex',
+			'nofollow',
+			'noarchive'
 		);
 	}
 
@@ -763,13 +764,13 @@ class Doing_It_Right extends Generate_Ldjson {
 	 *
 	 * @param array $args The post args.
 	 * @return array $data {
-	 *	 'title' => $title,
-	 *	 'title_is_from_custom_field' => $title_is_from_custom_field,
-	 *	 'description' => $description,
-	 *	 'description_is_from_custom_field' => $description_is_from_custom_field,
-	 *	 'noindex' => $noindex,
-	 *	 'nofollow' => $nofollow,
-	 *	 'noarchive' => $noarchive
+	 *    $title,
+	 *    $title_is_from_custom_field,
+	 *    $description,
+	 *    $description_is_from_custom_field,
+	 *    $noindex,
+	 *    $nofollow,
+	 *    $noarchive
 	 * }
 	 */
 	protected function the_seo_bar_post_data( $args ) {
@@ -809,14 +810,14 @@ class Doing_It_Right extends Generate_Ldjson {
 		$nofollow = (bool) $nofollow;
 		$noarchive = (bool) $noarchive;
 
-		return array(
-			'title' => $title,
-			'title_is_from_custom_field' => $title_is_from_custom_field,
-			'description' => $description,
-			'description_is_from_custom_field' => $description_is_from_custom_field,
-			'noindex' => $noindex,
-			'nofollow' => $nofollow,
-			'noarchive' => $noarchive,
+		return compact(
+			'title',
+			'title_is_from_custom_field',
+			'description',
+			'description_is_from_custom_field',
+			'noindex',
+			'nofollow',
+			'noarchive'
 		);
 	}
 
