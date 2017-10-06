@@ -1,9 +1,9 @@
 [submodule "wp-content/themes/memuller"]
 	path = wp-content/themes/memuller
-	url = https://gitlab.com/memuller.web/wp_theme.git
+	url = git@github.com:memuller/wp.memuller.theme.git
 [submodule "wp-content/themes/jeancatanho"]
 	path = wp-content/themes/jeancatanho
 	url = https://github.com/jensmcatanho/publisher-theme.git
 [submodule "wp-content/plugins/memuller"]
 	path = wp-content/plugins/memuller
-	url = https://gitlab.com/memuller.web/wp_plugin.git
+	url = git@github.com:memuller/wp.memuller.plugin.git
