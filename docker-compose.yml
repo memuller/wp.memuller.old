@@ -1,0 +1,32 @@
+version: '3.3'
+
+services:
+
+  # nginx-proxy:
+  #   image: jwilder/nginx-proxy
+  #   ports:
+  #     - "80:80"
+  #   volumes:
+  #     - /var/run/docker.sock:/tmp/docker.sock:ro
+
+  web:
+    image: webdevops/php-nginx:alpine-php7
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - .:/app
+      - ./config/nginx/vhost.conf:/opt/docker/etc/nginx/vhost.conf
+    environment:
+      - VIRTUAL_HOST=memuller.dev
+    links:
+      - db
+
+  db:
+    image: mysql:5.5
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: memuller
+    volumes:
+      - ./config/mysql/:/docker-entrypoint-initdb.d
