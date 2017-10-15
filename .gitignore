@@ -5,8 +5,9 @@
 /share
 /config
 
+/config.sample/mysql/dump.sql
+
 /wp-content/advanced-cache.php
 /wp-content/wp-cache-config.php
 /wp-content/cache
 
-*.sql
