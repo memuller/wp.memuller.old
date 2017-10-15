@@ -2,6 +2,8 @@
 /wp-content/uploads
 /data
 /var
+/share
+/config
 
 /wp-content/advanced-cache.php
 /wp-content/wp-cache-config.php
